@@ -1,4 +1,3 @@
-import React from "react";
 import {
   Box,
   TextField,
@@ -10,10 +9,12 @@ import {
 import { Google } from "@mui/icons-material";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import { useLoginStyle } from "./Login.styles";
+import { useAuth } from "../Auth/Auth.context";
 
 const Login = () => {
   const { classes } = useLoginStyle();
-
+  const { isAutenticate } = useAuth();
+  console.log(isAutenticate);
   // Maneja el clic en el botón de Google
   const handleGoogleLogin = () => {
     // Redirige al backend para iniciar sesión con Google

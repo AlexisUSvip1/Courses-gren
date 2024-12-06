@@ -12,11 +12,13 @@ export const useLoginStyle = makeStyles()(() => ({
   form: {
     width: "100%",
     maxWidth: 400,
-    padding: "0 16px",
+
+    padding: "0 0px",
   },
   textField: {
     "& .MuiOutlinedInput-root": {
       borderRadius: 20, // Bordes redondeados
+      borderColor: "#C7C58D",
     },
   },
   button: {
@@ -30,7 +32,8 @@ export const useLoginStyle = makeStyles()(() => ({
   socialButton: {
     borderRadius: 20, // Bordes redondeados
     backgroundColor: "white",
-    borderColor: "#d9d9d9",
+    color: "black",
+    boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)", // Agrega un sombreado sutil
     "&:hover": {
       backgroundColor: "#f5f5f5",
     },

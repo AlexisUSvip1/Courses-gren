@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import axios from "axios";
+import { enqueueSnackbar } from "notistack";
 
 // Define el tipo del usuario
 interface User {
@@ -14,7 +15,14 @@ interface AuthContextType {
   user: User | null;
   setUser: (user: User | null) => void;
   isAutenticate: boolean;
-  setIsAutenticate: (isAutenticate: boolean) => void; // Corregido el tipo aquí
+  setIsAutenticate: (isAutenticate: boolean) => void;
+  registerUser?: (
+    email: string,
+    password: string,
+    displayName: string,
+    age: string,
+    date: string
+  ) => void; // Nuevo método
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -39,14 +47,43 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       });
   }, []);
 
+  // Función para registrar un usuario
+  const registerUser = (
+    email: string,
+    password: string,
+    displayName: string,
+    age: string,
+    date: string
+  ) => {
+    axios
+      .post(
+        "http://localhost:3000/auth/register",
+        { email, password, displayName, age, date },
+        { withCredentials: true }
+      )
+      .then((response) => {
+        if (response.data) {
+          setUser(response.data); // Guardamos el nuevo usuario en el estado
+          setIsAutenticate(true); // Marcamos como autenticado
+          enqueueSnackbar(response.data.message, { variant: "success" }); // Notificación de éxito
+        }
+      })
+      .catch((err) => {
+        const errorMessage =
+          err.response?.data?.message || "Error al registrar";
+        enqueueSnackbar(errorMessage, { variant: "error" }); // Notificación de error
+      });
+  };
+
   return (
     <AuthContext.Provider
-      value={{ user, setUser, isAutenticate, setIsAutenticate }}
+      value={{ user, setUser, isAutenticate, setIsAutenticate, registerUser }}
     >
       {children}
     </AuthContext.Provider>
   );
 };
+
 
 // Hook personalizado para usar el contexto
 // eslint-disable-next-line react-refresh/only-export-components

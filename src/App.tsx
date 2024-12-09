@@ -7,34 +7,36 @@ import {
 } from "react-router-dom";
 import { Home } from "./Home/Home";
 import Login from "./Login/Login";
-import { AuthProvider, useAuth } from "./Auth/Auth.context";
+import { AuthProvider, useAuth } from "./Auth/Auth.context"; // Importación correcta
+import Register from "./Register/Register";
+import { SnackbarProvider } from "notistack";
+
+// Componente ProtectedRoute
+const ProtectedRoute = () => {
+  const { isAutenticate } = useAuth(); // Ahora está dentro del AuthProvider
+
+  if (!isAutenticate) {
+    return <Navigate to="/" replace />;
+  }
+
+  return <Home />;
+};
 
 const App = () => {
   return (
     <AuthProvider>
-      <Router>
-        <CssBaseline />
-        <Routes>
-          <Route path="/" element={<Login />} />
-          {/* Ruta protegida, redirige al login si no está autenticado */}
-          <Route path="/inicio" element={<ProtectedRoute />} />
-        </Routes>
-      </Router>
+      {/* El AuthProvider debe envolver toda la aplicación */}
+      <SnackbarProvider maxSnack={3}>
+        <Router>
+          <CssBaseline />
+          <Routes>
+            <Route path="/" element={<Login />} />
+            <Route path="/inicio" element={<ProtectedRoute />} />
+          </Routes>
+        </Router>
+      </SnackbarProvider>
     </AuthProvider>
   );
-};
-
-// Componente ProtectedRoute
-const ProtectedRoute = () => {
-  const { user } = useAuth(); // Obtén el estado de autenticación desde el contexto de Auth
-
-  // Si no hay usuario (no autenticado), redirige al login
-  if (!user) {
-    return <Navigate to="/" replace />;
-  }
-
-  // Si está autenticado, muestra la página Home
-  return <Home />;
 };
 
 export default App;

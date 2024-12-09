@@ -9,13 +9,10 @@ import {
 import { Google } from "@mui/icons-material";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import { useLoginStyle } from "./Login.styles";
-import { useAuth } from "../Auth/Auth.context";
+import { Link } from "react-router-dom"; // Para redirigir al registro
 
 const Login = () => {
   const { classes } = useLoginStyle();
-  const { isAutenticate } = useAuth();
-  console.log(isAutenticate);
-  // Maneja el clic en el botón de Google
   const handleGoogleLogin = () => {
     // Redirige al backend para iniciar sesión con Google
     window.location.href = "http://localhost:3000/auth/google";
@@ -89,6 +86,23 @@ const Login = () => {
         >
           Iniciar sesión con Facebook
         </Button>
+
+        {/* Sección de Crear una cuenta */}
+        <Stack
+          direction="row"
+          justifyContent="center"
+          alignItems="center"
+          spacing={1}
+        >
+          <Typography variant="body2" sx={{ color: "#6c757d" }}>
+            ¿No tienes una cuenta?
+          </Typography>
+          <Link to="/registro" style={{ textDecoration: "none" }}>
+            <Button variant="text" color="primary">
+              Crear una cuenta
+            </Button>
+          </Link>
+        </Stack>
       </Stack>
     </Box>
   );
